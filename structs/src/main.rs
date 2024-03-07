@@ -1,48 +1,44 @@
-struct User {
-    username: String,
-    email: String,
-    sign_in_count: u64,
-    active: bool,
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
 }
 
 fn main() {
-    let user1 = User {
-        email: String::from("someone@example.com"),
-        username: String::from("someusername123"),
-        active: true,
-        sign_in_count: 1,
-    };
+    let width1 = 30;
+    let height1 = 50;
+
     println!(
-        "{}, {}, {}, {}",
-        user1.email, user1.username, user1.active, user1.sign_in_count
+        "The area of the rectangle is {} square pixels.",
+        area(width1, height1)
     );
 
-    let user2 = User {
-        email: String::from("another@example.com"),
-        username: String::from("anotherusername567"),
-        active: user1.active,
-        sign_in_count: user1.sign_in_count,
-    };
+    let rect1 = (30, 50);
     println!(
-        "{}, {}, {}, {}",
-        user2.email, user2.username, user2.active, user2.sign_in_count
+        "The area of the rectangle is {} square pixels.",
+        area2(rect1)
     );
 
-    let user3 = User {
-        email: String::from("another3@example.com"),
-        username: String::from("anotherusername5678"),
-        ..user1
+    let rect2 = Rectangle {
+        width: 30,
+        height: 50,
     };
     println!(
-        "{}, {}, {}, {}",
-        user3.email, user3.username, user3.active, user3.sign_in_count
+        "The area of the rectangle is {} square pixels.",
+        area3(&rect2)
     );
+    println!("rect2 is {:?}", rect2);
+    println!("rect2 is {:#?}", rect2);
+}
 
-    struct Color(i32, i32, i32);
-    struct Point(i32, i32, i32);
+fn area(width: u32, height: u32) -> u32 {
+    width * height
+}
 
-    let black = Color(0, 0, 0);
-    let origin = Point(0, 0, 0);
-    println!("{} {} {}", black.0, black.1, black.2);
-    println!("{} {} {}", origin.0, origin.1, origin.2);
+fn area2(dimensions: (u32, u32)) -> u32 {
+    dimensions.0 * dimensions.1
+}
+
+fn area3(rectangle: &Rectangle) -> u32 {
+    rectangle.width * rectangle.height
 }
