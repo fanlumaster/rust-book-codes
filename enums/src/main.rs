@@ -1,112 +1,123 @@
-fn first_match() {
-    enum Coin {
-        Penny,
-        Nickel,
-        Dime,
-        Quarter,
+fn first_if_let() {
+    let some_u8_value = Some(3u8);
+    match some_u8_value {
+        Some(3) => println!("three"),
+        _ => (),
     }
-
-    fn value_in_cents(coin: Coin) -> u32 {
-        match coin {
-            Coin::Penny => 1,
-            Coin::Nickel => 5,
-            Coin::Dime => 10,
-            Coin::Quarter => 25,
-        }
-    }
-
-    fn value_in_cents_v2(coin: Coin) -> u32 {
-        match coin {
-            Coin::Penny => {
-                println!("Lucky penny!");
-                1
-            }
-            Coin::Nickel => 5,
-            Coin::Dime => 10,
-            Coin::Quarter => 25,
-        }
-    }
-
-    let coin = Coin::Penny;
-    println!("Penny: {}", value_in_cents(coin));
-    let coin = Coin::Nickel;
-    println!("Nickel: {}", value_in_cents(coin));
-    let coin = Coin::Dime;
-    println!("Dime: {}", value_in_cents(coin));
-    let coin = Coin::Quarter;
-    println!("Quarter: {}", value_in_cents(coin));
-    let coin = Coin::Penny;
-    println!("Penny: {}", value_in_cents_v2(coin));
 }
 
-fn second_match() {
+fn second_if_let() {
+    let some_u8_value = Some(3u8);
+    if let Some(3) = some_u8_value {
+        println!("three");
+    }
+}
+
+fn third_if_let() {
     #[derive(Debug)]
     enum UsState {
         Alabama,
         Alaska,
+        // --snip--
     }
-
     enum Coin {
         Penny,
         Nickel,
         Dime,
         Quarter(UsState),
     }
-
-    fn value_in_cents(coin: Coin) -> u32 {
-        match coin {
-            Coin::Penny => 1,
-            Coin::Nickel => 5,
-            Coin::Dime => 10,
-            Coin::Quarter(state) => {
-                println!("State quarter from {:?}!", state);
-                25
-            }
-        }
+    let mut count = 0;
+    let coin = Coin::Quarter(UsState::Alaska);
+    match coin {
+        Coin::Quarter(state) => println!("State quarter from {:?}", state),
+        _ => count += 1,
     }
 
-    value_in_cents(Coin::Penny);
-    value_in_cents(Coin::Nickel);
-    value_in_cents(Coin::Dime);
-    value_in_cents(Coin::Quarter(UsState::Alabama));
-    value_in_cents(Coin::Quarter(UsState::Alaska));
+    let coin = Coin::Quarter(UsState::Alabama);
+    match coin {
+        Coin::Quarter(state) => println!("State quarter from {:?}", state),
+        _ => count += 1,
+    }
+
+    let coin = Coin::Penny;
+    if let Coin::Quarter(state) = coin {
+        println!("State quarter from {:?}!", state);
+    } else {
+        count += 1;
+    }
+    println!("count: {}", count);
+
+    let coin = Coin::Nickel;
+    if let Coin::Quarter(state) = coin {
+        println!("State quarter from {:?}!", state);
+    } else {
+        count += 1;
+    }
+    println!("count: {}", count);
+
+    let coin = Coin::Dime;
+    if let Coin::Quarter(state) = coin {
+        println!("State quarter from {:?}!", state);
+    } else {
+        count += 1;
+    }
+    println!("count: {}", count);
 }
 
-fn third_match() {
-    fn plus_one(x: Option<i32>) -> Option<i32> {
-        match x {
-            None => None,
-            Some(i) => Some(i + 1),
-        }
+fn fourth_if_let() {
+    #[derive(Debug)]
+    enum UsState {
+        Alabama,
+        Alaska,
+        // --snip--
+    }
+    enum Coin {
+        Penny,
+        Nickel,
+        Dime,
+        Quarter(UsState),
+    }
+    let mut count = 0;
+    let coin = Coin::Quarter(UsState::Alaska);
+    if let Coin::Quarter(state) = coin {
+        println!("State quarter from {:?}!", state);
+    } else {
+        count += 1;
     }
 
-    let five = Some(5);
-    let six = plus_one(five);
-    match six {
-        Some(value) => println!("Value: {}", value),
-        None => println!("None: {}", "None"),
+    let coin = Coin::Quarter(UsState::Alabama);
+    if let Coin::Quarter(state) = coin {
+        println!("State quarter from {:?}!", state);
+    } else {
+        count += 1;
     }
-    let none = plus_one(None);
-    match none {
-        Some(value) => println!("Value: {}", value),
-        None => println!("None: {}", "None"),
-    }
-}
 
-fn fourch_match() {
-    let some_u3_value = 3u8;
-    match some_u3_value {
-        1 => println!("one"),
-        3 => println!("three"),
-        5 => println!("five"),
-        7 => println!("seven"),
-        _ => (),
+    let coin = Coin::Penny;
+    if let Coin::Quarter(state) = coin {
+        println!("State quarter from {:?}!", state);
+    } else {
+        count += 1;
     }
+    println!("count: {}", count);
+
+    let coin = Coin::Nickel;
+    match coin {
+        Coin::Quarter(state) => println!("State quarter from {:?}", state),
+        _ => count += 1,
+    }
+    println!("count: {}", count);
+
+    let coin = Coin::Dime;
+    match coin {
+        Coin::Quarter(state) => println!("State quarter from {:?}", state),
+        _ => count += 1,
+    }
+    println!("count: {}", count);
 }
 
 fn main() {
-    first_match();
-    second_match();
-    third_match();
-    fourch_match();
+    first_if_let();
+    second_if_let();
+    third_if_let();
+    fourth_if_let();
 }
