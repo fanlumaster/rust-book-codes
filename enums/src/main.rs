@@ -1,128 +1,112 @@
-fn first_enum() {
-    #[derive(Debug)]
-    enum IpAddrKind {
-        V4,
-        V6,
+fn first_match() {
+    enum Coin {
+        Penny,
+        Nickel,
+        Dime,
+        Quarter,
     }
 
-    #[derive(Debug)]
-    struct IpAddr {
-        kind: IpAddrKind,
-        address: String,
-    }
-
-    fn route(ip_type: IpAddrKind) {
-        println!("{:#?}", ip_type);
-    }
-    let four = IpAddrKind::V4;
-    let six = IpAddrKind::V6;
-    route(four);
-    route(six);
-
-    let home = IpAddr {
-        kind: IpAddrKind::V4,
-        address: String::from("127.0.0.1"),
-    };
-    println!("{:#?} {}", home.kind, home.address);
-    println!("{:#?}", home);
-
-    let loopback = IpAddr {
-        kind: IpAddrKind::V6,
-        address: String::from("::1"),
-    };
-    println!("{:#?} {}", loopback.kind, loopback.address);
-    println!("{:#?}", loopback);
-}
-
-fn another_enum() {
-    #[derive(Debug)]
-    enum IpAddr {
-        V4(String),
-        V6(String),
-    }
-    let home = IpAddr::V4(String::from("127.0.0.1"));
-    let loopback = IpAddr::V6(String::from("::1"));
-    println!("{:#?}", home);
-    println!("{:#?}", loopback);
-}
-
-fn third_enum() {
-    #[derive(Debug)]
-    enum IpAddr {
-        V4(u8, u8, u8, u8),
-        V6(String),
-    }
-    let home = IpAddr::V4(127, 0, 0, 1);
-    let loopback = IpAddr::V6(String::from("::1"));
-    println!("{:#?}", home);
-    println!("{:#?}", loopback);
-}
-
-fn fourth_enum() {
-    #[derive(Debug)]
-    enum Message {
-        Quit,
-        Move { x: i32, y: i32 },
-        Write(String),
-        ChangeColor(i32, i32, i32),
-    }
-
-    impl Message {
-        fn call(&self) {
-            println!("Message fn.");
+    fn value_in_cents(coin: Coin) -> u32 {
+        match coin {
+            Coin::Penny => 1,
+            Coin::Nickel => 5,
+            Coin::Dime => 10,
+            Coin::Quarter => 25,
         }
     }
 
-    let m = Message::Write(String::from("hello"));
-    m.call();
-    println!("{:#?}", m);
-    let q = Message::Quit;
-    println!("{:#?}", q);
-    let move_msg = Message::Move { x: 12, y: 13 };
-    println!("{:#?}", move_msg);
-    match move_msg {
-        Message::Move { x, y } => {
-            println!("x: {}, y: {}", x, y);
-        }
-        _ => {
-            println!("This message is not a Move variant.");
+    fn value_in_cents_v2(coin: Coin) -> u32 {
+        match coin {
+            Coin::Penny => {
+                println!("Lucky penny!");
+                1
+            }
+            Coin::Nickel => 5,
+            Coin::Dime => 10,
+            Coin::Quarter => 25,
         }
     }
-    let change_color_msg = Message::ChangeColor(1, 2, 3);
-    println!("{:#?}", change_color_msg);
+
+    let coin = Coin::Penny;
+    println!("Penny: {}", value_in_cents(coin));
+    let coin = Coin::Nickel;
+    println!("Nickel: {}", value_in_cents(coin));
+    let coin = Coin::Dime;
+    println!("Dime: {}", value_in_cents(coin));
+    let coin = Coin::Quarter;
+    println!("Quarter: {}", value_in_cents(coin));
+    let coin = Coin::Penny;
+    println!("Penny: {}", value_in_cents_v2(coin));
 }
 
-fn fifth_enum() {
+fn second_match() {
     #[derive(Debug)]
-    enum MyOption<T> {
-        Some(T),
-        None,
+    enum UsState {
+        Alabama,
+        Alaska,
     }
 
-    let some_number = MyOption::Some(5);
-    let some_string = MyOption::Some("a string");
-    let absent_number: MyOption<i32> = MyOption::None;
-    println!("{:#?}", some_number);
-    println!("{:#?}", some_string);
-    println!("{:#?}", absent_number);
+    enum Coin {
+        Penny,
+        Nickel,
+        Dime,
+        Quarter(UsState),
+    }
+
+    fn value_in_cents(coin: Coin) -> u32 {
+        match coin {
+            Coin::Penny => 1,
+            Coin::Nickel => 5,
+            Coin::Dime => 10,
+            Coin::Quarter(state) => {
+                println!("State quarter from {:?}!", state);
+                25
+            }
+        }
+    }
+
+    value_in_cents(Coin::Penny);
+    value_in_cents(Coin::Nickel);
+    value_in_cents(Coin::Dime);
+    value_in_cents(Coin::Quarter(UsState::Alabama));
+    value_in_cents(Coin::Quarter(UsState::Alaska));
 }
 
-fn sixth_enum() {
-    let x: i8 = 8;
-    let y: Option<i8> = Some(5);
+fn third_match() {
+    fn plus_one(x: Option<i32>) -> Option<i32> {
+        match x {
+            None => None,
+            Some(i) => Some(i + 1),
+        }
+    }
 
-    let sum = match y {
-        Some(val) => x + val,
-        None => x,
-    };
-    println!("Sum: {}", sum);
+    let five = Some(5);
+    let six = plus_one(five);
+    match six {
+        Some(value) => println!("Value: {}", value),
+        None => println!("None: {}", "None"),
+    }
+    let none = plus_one(None);
+    match none {
+        Some(value) => println!("Value: {}", value),
+        None => println!("None: {}", "None"),
+    }
+}
+
+fn fourch_match() {
+    let some_u3_value = 3u8;
+    match some_u3_value {
+        1 => println!("one"),
+        3 => println!("three"),
+        5 => println!("five"),
+        7 => println!("seven"),
+        _ => (),
+    }
 }
 
 fn main() {
-    first_enum();
-    another_enum();
-    third_enum();
-    fourth_enum();
-    fifth_enum();
-    sixth_enum();
+    first_match();
+    second_match();
+    third_match();
+    fourch_match();
 }
